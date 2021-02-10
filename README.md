@@ -6,5 +6,6 @@ Name | Role
 Luke Rogers   |  Python Scripter / Student            
 Dr. Lisa Gandy |  Professor
 ## Language
+Python
 ## Background
 This code was written my Sophomore year of college for an Honors project. This was an extra project on top of the normal class. 
