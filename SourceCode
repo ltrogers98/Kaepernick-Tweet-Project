@@ -1,0 +1,81 @@
+#Author: Luke Rogers
+#Professor: Dr. Lisa Gandy
+#University: Central Michigan University
+
+
+from nltk.tokenize import TreebankWordTokenizer
+import csv
+from datetime import datetime
+
+DIR = "C:/Users/ltrogers98/Downloads/"
+fRead =  open(DIR + 'AllDataCleaned.csv')
+import sys
+sys.path.append('c:/users/ltrogers98/anaconda3/lib/site-packages')
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+import pandas as pd
+from urllib.parse import urlparse
+reader = csv.DictReader(fRead)
+sentence = ""
+temp = " "
+i = 0
+
+def is_url(url):
+    try:
+        result  = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
+    
+for row in reader:
+          #csv_reader = csv.DictReader(csv_file)
+    #i+=1
+    #line_count = 0
+    temp = row["tweet"]
+    tempDate = row["date"].split()
+    tempDate = ' '.join(tempDate[1:3])
+    date_object = datetime.strptime(tempDate, "%b %d")
+    print (date_object)
+    print (tempDate)
+   # assert(0)
+    date_objectTarget = datetime(1900,9,15,0,0,0)
+    date_objectTarget2 = datetime(1900,10,25,0,0,0)
+    #if date_objectTarget <= date_object:
+    if date_object >= date_objectTarget and date_object <= date_objectTarget2:
+         print ('success')
+         temp = ' '.join([y for y in temp.split() if not is_url(y)])
+         sentence += temp
+    
+        
+
+tokenizer = TreebankWordTokenizer()
+tokens = tokenizer.tokenize(sentence.lower())
+print(tokens)
+from collections import Counter
+bag_of_words = Counter(tokens)
+print(bag_of_words)
+
+
+#Some words to get rid of them, for sake of time we did not stop them all
+stopwords = set(STOPWORDS)
+stopwords.add("VrrXAv7u4I'b'Now")
+stopwords.add("b'Full")
+stopwords.add("TheCourtJASter")
+stopwords.add("scicomm")
+stopwords.add("b'Now")
+stopwords.add("Adb'")
+stopwords.add("Kylegriffin1")
+stopwords.add("nhttps")
+stopwords.add("b'RT")
+stopwords.add("b'17")
+
+wordcloud = WordCloud(width = 800, height = 800, background_color = 'white', stopwords = stopwords, min_font_size = 10).generate(sentence)
+
+
+#set paramters for the word cloud
+plt.figure(figsize = (8, 8), facecolor = None) 
+plt.imshow(wordcloud) 
+plt.axis("off") 
+plt.tight_layout(pad = 0) 
+  
+plt.show() 
